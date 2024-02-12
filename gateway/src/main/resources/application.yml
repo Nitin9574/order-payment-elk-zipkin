@@ -1,0 +1,39 @@
+server:
+  port: 8989
+spring:
+  application:
+    name: GATEWAY-SERVICE
+
+  config:
+   import: configserver:http://localhost:9196
+
+  cloud:
+    gateway:
+      routes:
+        - id: order
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order/**
+        - id: payment
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/**
+
+logging:
+  file:
+    name: D:/Springboot/elk_logs/microservices_elk_logs.log
+
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+#  instance:
+#    hostname: localhost
